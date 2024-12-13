@@ -35,7 +35,6 @@ with open(filename, "r") as file:
                     keymax2 = key
                     break
 
-            #print(line.lstrip(">") + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
             print(line[1:]  + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
             break
 
@@ -57,7 +56,6 @@ with open(filename, "r") as file:
                     keymax2 = key
                     break
             
-            #print(line.lstrip(">") + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
             print(line[1:]  + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
 
             line = file.readline()[:-1]
