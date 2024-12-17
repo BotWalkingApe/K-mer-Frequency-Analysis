@@ -9,74 +9,82 @@ if len(sys.argv) < 3:
 filename = sys.argv[1]
 kmer = int(sys.argv[2])
 
-print("Sequence name    Most frequent k-mer (k=" + str(kmer) + ")   # of occurrences    Least frequent k-mer (k=" + str(kmer) + ")  # of occurrences")
+print(f"Sequence name    Most frequent k-mer (k={kmer})    # of occurrences    Least frequent k-mer (k={kmer})    # of occurrences")
+#sys.stdout.write(f"Sequence name    Most frequent k-mer (k={kmer})    # of occurrences    Least frequent k-mer (k={kmer})    # of occurrences\n")
+
+#print("Sequence name    Most frequent k-mer (k=" + str(kmer) + ")   # of occurrences    Least frequent k-mer (k=" + str(kmer) + ")  # of occurrences")
+#print(f"Sequence name    Most frequent k-mer (k=" + str(kmer) + ")   # of occurrences    Least frequent k-mer (k=" + str(kmer) + ")  # of occurrences")
 
 with open(filename, "r") as file:
-    line = file.readline()[:-1]  # Lê a primeira linha do arquivo sem a quebra de linha
-    stop = file.read(kmer)  # Lê os primeiros 'kmer' caracteres
+    sequence_header = file.readline()[:-1]  # Lê a primeira linha do arquivo sem a quebra de linha
+    current_kmer = file.read(kmer)  # Lê os primeiros 'kmer' caracteres
 
-    conta_kmers = {stop: 1}  # Dicionário para contar a ocorrência de cada kmer
+    conta_kmers = {current_kmer: 1}  # Dicionário para contar a ocorrência de cada kmer
 
     while True:
-        stop = stop[1:]  # Remove o primeiro caractere
-        aux = file.read(1)  # Lê o próximo caractere
+        current_kmer = current_kmer[1:]  # Remove o primeiro caractere
+        next_char = file.read(1)  # Lê o próximo caractere
 
-        if aux == "":  # Fim do arquivo
+        if next_char == "":  # Fim do arquivo
             maxfrequence = max(conta_kmers.values())
             minfrequence = min(conta_kmers.values())
 
             for key in conta_kmers:  # Encontra o kmer menos frequente
                 if conta_kmers[key] == minfrequence:
-                    keyless = key
+                    least_frequent_kmer = key
                     break
 
             for key in conta_kmers:  # Encontra o kmer mais frequente
                 if conta_kmers[key] == maxfrequence:
-                    keymax2 = key
+                    most_frequent_kmer = key
                     break
 
-            print(line[1:]  + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
+            #print(sequence_header.lstrip(">") + "    " + most_frequent_kmer + "    " + str(maxfrequence) + "    " + least_frequent_kmer + "    " + str(minfrequence))
+            #print(sequence_header[1:]  + "    " + most_frequent_kmer + "    " + str(maxfrequence) + "    " + least_frequent_kmer + "    " + str(minfrequence))
+            print(f"{sequence_header[1:]}    {most_frequent_kmer}    {maxfrequence}    {least_frequent_kmer}    {minfrequence}")            
             break
 
-        if aux == "\n":  # Ignora quebras de linha
-            aux = file.read(1)
+        if next_char == "\n":  # Ignora quebras de linha
+            next_char = file.read(1)
 
-        if aux == ">":
+        if next_char == ">":
 
             maxfrequence = max(conta_kmers.values())
             minfrequence = min(conta_kmers.values())
 
             for key in conta_kmers:  # Encontra o kmer menos frequente
                 if conta_kmers[key] == minfrequence:
-                    keyless = key
+                    least_frequent_kmer = key
                     break
 
             for key in conta_kmers:  # Encontra o kmer mais frequente
                 if conta_kmers[key] == maxfrequence:
-                    keymax2 = key
+                    most_frequent_kmer = key
                     break
             
-            print(line[1:]  + "    " + keymax2 + "    " + str(maxfrequence) + "    " + keyless + "    " + str(minfrequence))
+            #print(sequence_header.lstrip(">") + "    " + most_frequent_kmer + "    " + str(maxfrequence) + "    " + least_frequent_kmer + "    " + str(minfrequence))
+            #print(sequence_header[1:]  + "    " + most_frequent_kmer + "    " + str(maxfrequence) + "    " + least_frequent_kmer + "    " + str(minfrequence))
+            print(f"{sequence_header[1:]}    {most_frequent_kmer}    {maxfrequence}    {least_frequent_kmer}    {minfrequence}")            
 
-            line = file.readline()[:-1]
-            line = aux + line
+            sequence_header = file.readline()[:-1]
+            sequence_header = next_char + sequence_header
 
             conta_kmers.clear()
 
-            stop = file.read(kmer)
-            conta_kmers = {stop: 1}
+            current_kmer = file.read(kmer)
+            conta_kmers = {current_kmer: 1}
 
             continue
 
 
-        stop = stop + aux  # Atualiza o kmer
+        current_kmer = current_kmer + next_char  # Atualiza o kmer
 
-        if len(stop) != kmer:  # Valida o tamanho do kmer
+        if len(current_kmer) != kmer:  # Valida o tamanho do kmer
             continue
 
-        if stop in conta_kmers:  # Incrementa a contagem se já existir no dicionário
-            conta_kmers[stop] += 1
+        if current_kmer in conta_kmers:  # Incrementa a contagem se já existir no dicionário
+            conta_kmers[current_kmer] += 1
         else:
-            conta_kmers[stop] = 1  # Adiciona o kmer ao dicionário
+            conta_kmers[current_kmer] = 1  # Adiciona o kmer ao dicionário
 
     
